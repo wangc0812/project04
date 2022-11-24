@@ -9,12 +9,14 @@ Matrix* createMatrix(size_t row, size_t column, int elenum, float* data)
     if (row <= 0 || column <= 0)
     {
         ERROR_INPUT_INPUTPARA;
+        printf("ERROR: This error happened in 'createMatrix' \n");
         return NULL;
     }
 
     if (data == NULL)
     {
         ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'createMatrix' \n");
         return NULL;
     }
     int mat_size = row * column;
@@ -33,6 +35,7 @@ Matrix* createMatrix(size_t row, size_t column, int elenum, float* data)
             mat->data = NULL;
 
             ERROR_MEM_ALLOCATE;
+            printf("ERROR: This error happened in 'createMatrix' \n");
             
             return NULL;
         }
@@ -49,6 +52,7 @@ Matrix* createMatrix(size_t row, size_t column, int elenum, float* data)
     else
     {
         printf("ERROR: the number of data does not match the matrix size \n");
+        printf("ERROR: This error happened in 'createMatrix' \n");
         
         return NULL;
     }
@@ -60,6 +64,7 @@ void deleteMatrix(Matrix* mat)
     if (mat == NULL)
     {
         ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'deleteMatrix()' \n");
         return;
     }
     
@@ -73,6 +78,7 @@ void printMatrix(const Matrix* mat)
     if (mat == NULL)
     {
         ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'printMatrix()' \n");
         return;
     }
 
@@ -95,6 +101,7 @@ Matrix* copyMatrix(const Matrix* mat_src)
     if (mat_src == NULL)
     {
        ERROR_INPUT_POINTER;
+       printf("ERROR: This error happened in 'copyMatrix()' \n");
        return NULL;
     }
 
@@ -109,6 +116,7 @@ void array_sum(const float* a, const float* b, float* sum, int length)
     if (a == NULL || b == NULL || sum == NULL)
     {
         ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'array_sum()' \n");
         return;
     }
 
@@ -126,6 +134,7 @@ void array_sub(const float* a, const float* b, float* sub, int length)
     if (a == NULL || b == NULL || sub == NULL)
     {
         ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'array_sub()' \n");
         return;
     }
 
@@ -143,12 +152,14 @@ Matrix* addMatrix(const Matrix* A, const Matrix* B)
     if (A == NULL || B == NULL)
     {
         ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'addMatrix()' \n");
         return NULL;
     }
 
     if (A->column != B->column || A->row != B->row)
     {
         ERROR_SIZE_MATCH;
+        printf("ERROR: This error happened in 'addMatrix()' \n");
         return NULL;
     }
 
@@ -167,12 +178,14 @@ Matrix* subtractMatrix(const Matrix* A, const Matrix* B)
     if (A == NULL || B == NULL)
     {
         ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'subtractMatrix()' \n");
         return NULL;
     }
 
     if (A->column != B->column || A->row != B->row)
     {
         ERROR_SIZE_MATCH;
+        printf("ERROR: This error happened in 'subtractMatrix()' \n");
         return NULL;
     }
 
@@ -191,6 +204,7 @@ Matrix* addScalar(const Matrix* A, const float b)
     if (A == NULL)
     {
         ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'addScalar()' \n");
         return NULL;
     }
 
@@ -211,6 +225,7 @@ Matrix* subScalar(const Matrix* A, const float b)
     if (A == NULL)
     {
         ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'subScalar()' \n");
         return NULL;
     }
 
@@ -225,6 +240,7 @@ Matrix* multiplyScalar(const Matrix* A, const float b)
     if (A == NULL)
     {
         ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'multiplyScalar()' \n");
         return NULL;
     }
 
@@ -244,6 +260,7 @@ float maxelem(const Matrix* A)
     if (A == NULL)
     {
         ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'maxelem()' \n");
         return 1;
     }
 
@@ -265,6 +282,7 @@ float minelem(const Matrix* A)
     if (A == NULL)
     {
         ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'minelem()' \n");
         return 1;
     }
 
@@ -286,12 +304,14 @@ Matrix* mulMatrix(const Matrix* A, const Matrix* B)
     if (A == NULL || B == NULL)
     {
         ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'mulMatrix()' \n");
         return NULL;
     }
 
     if (A->column != B->row)
     {
         ERROR_SIZE_MATCH;
+        printf("ERROR: This error happened in 'mulMatrix()' \n");
         return NULL;
     }
 
@@ -328,6 +348,7 @@ Matrix* transpMatrix(const Matrix* A)
     if (A == NULL)
     {
         ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'transpMatrix()' \n");
         return NULL;
     }
 
@@ -367,5 +388,47 @@ Matrix* identityMatrix(const size_t side)
     Matrix* mat = createMatrix(side, side, size, data);
 
     return mat;
+
+}
+
+Matrix* matmul_plain(const Matrix* A, const Matrix* B)
+{
+    if (A == NULL || B == NULL)
+    {
+        ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'matmul_plain()' \n");
+        return NULL;
+    }
+
+    if (A->column != B->row)
+    {
+        ERROR_SIZE_MATCH;
+        printf("ERROR: This error happened in 'matmul_plain()' \n");
+        return NULL;
+    }
+
+    int i, j, k, size;
+    size = A->row * B->column;
+    float c_data[size];
+    int C_index = 0;
+    float C_element = 0;
+
+    for(i=0; i < A->row; i++)
+    {
+        for(j=0; j < B->column; j++)
+        {
+            for(k=0; k <A->column; k++)
+            {
+                C_element += A->data[(i * A->column) + k] * B->data[(k * B->column) + j];
+            }
+            c_data[C_index] = C_element;
+            C_index += 1;
+            C_element = 0;
+        }
+    }
+    
+    Matrix* C = createMatrix( A->row, B->column, size, c_data);
+
+    return C;
 
 }

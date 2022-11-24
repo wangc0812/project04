@@ -43,4 +43,6 @@ Matrix* transpMatrix(const Matrix* A);
 
 Matrix* identityMatrix(const size_t side);
 
+Matrix* matmul_plain(const Matrix* A, const Matrix* B);
+
 #endif
