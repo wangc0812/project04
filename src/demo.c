@@ -3,7 +3,7 @@
 #include "matrix.h"
 #include "define.h"
 
-int main()
+int demo()
 {
     printf("test \n");
     const int elenum = 6;

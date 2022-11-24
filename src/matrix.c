@@ -82,6 +82,7 @@ void printMatrix(const Matrix* mat)
         return;
     }
 
+    printf("---------------matrix print start---------------- \n");
     int i, j;
     for (i = 0; i < mat->row; i++) 
     {
@@ -91,6 +92,7 @@ void printMatrix(const Matrix* mat)
         }
         printf("\n");
     }
+    printf("---------------matrix print end---------------- \n");
 
     return;
 }
@@ -253,7 +255,6 @@ Matrix* multiplyScalar(const Matrix* A, const float b)
     }
     return C;
 }
-
 
 float maxelem(const Matrix* A)
 {
