@@ -2,7 +2,7 @@ SRC_DIR = ./src
 SOURCE  = $(wildcard $(SRC_DIR)/*.c) # Search all the .c files in the current directory, and return to SOURCE
 
 OBJS    = $(patsubst %.c, %.o, $(SOURCE)) # Replace all .c files with .o files 
-TARGET  = matrix
+TARGET  = main
 INCLUDE = -I./inc # -I means search files in the specificed folder
 # all .h files are in inc
 # all .cpp files are in src

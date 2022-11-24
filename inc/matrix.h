@@ -11,7 +11,7 @@ typedef struct Matrix {
     float *data;
 } Matrix;
 
-Matrix* createMatrix(size_t row, size_t column, size_t elenum, float* data);
+Matrix* createMatrix(size_t row, size_t column, int elenum, float* data);
 
 void deleteMatrix(Matrix* mat);
 
@@ -19,9 +19,9 @@ void printMatrix(const Matrix* mat);
 
 Matrix* copyMatrix(const Matrix* mat_src);
 
-void array_sum(const float* a, const float* b, float* sum, size_t length);
+void array_sum(const float* a, const float* b, float* sum, int length);
 
-void array_sub(const float* a, const float* b, float* sub, size_t length);
+void array_sub(const float* a, const float* b, float* sub, int length);
 
 Matrix* addMatrix(const Matrix* A, const Matrix* B);
 

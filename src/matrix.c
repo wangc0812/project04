@@ -1,7 +1,7 @@
 #include "matrix.h"
 #include "define.h"
 
-Matrix* createMatrix(size_t row, size_t column, size_t elenum, float* data) 
+Matrix* createMatrix(size_t row, size_t column, int elenum, float* data) 
 {
     //Generate Matrix Struct 
     //Please remember to free the memory due to dynamic allocate
@@ -17,7 +17,7 @@ Matrix* createMatrix(size_t row, size_t column, size_t elenum, float* data)
         ERROR_INPUT_POINTER;
         return NULL;
     }
-    size_t mat_size = row * column;
+    int mat_size = row * column;
     if (mat_size == elenum)
     {
         Matrix* mat = MALLOC(1, Matrix);
@@ -37,7 +37,7 @@ Matrix* createMatrix(size_t row, size_t column, size_t elenum, float* data)
             return NULL;
         }
 
-        size_t i;
+        int i;
         for (i = 0; i < mat_size; i++) 
         {
             mat->data[i] = data[i];
@@ -76,7 +76,7 @@ void printMatrix(const Matrix* mat)
         return;
     }
 
-    size_t i, j;
+    int i, j;
     for (i = 0; i < mat->row; i++) 
     {
         for (j = 0; j < mat->column; j++)
@@ -98,13 +98,13 @@ Matrix* copyMatrix(const Matrix* mat_src)
        return NULL;
     }
 
-    size_t elenum = mat_src->row * mat_src->column;
+    int elenum = mat_src->row * mat_src->column;
     Matrix* mat_copy = createMatrix(mat_src->row, mat_src->column, elenum, mat_src->data);
     
     return mat_copy;
 }
 
-void array_sum(const float* a, const float* b, float* sum, size_t length)
+void array_sum(const float* a, const float* b, float* sum, int length)
 {
     if (a == NULL || b == NULL || sum == NULL)
     {
@@ -112,7 +112,7 @@ void array_sum(const float* a, const float* b, float* sum, size_t length)
         return;
     }
 
-    size_t  i;
+    int  i;
     for (i = 0; i < length; i++)
     {
         sum[i] = a[i] + b[i];
@@ -121,7 +121,7 @@ void array_sum(const float* a, const float* b, float* sum, size_t length)
     return;
 }
 
-void array_sub(const float* a, const float* b, float* sub, size_t length)
+void array_sub(const float* a, const float* b, float* sub, int length)
 {
     if (a == NULL || b == NULL || sub == NULL)
     {
@@ -129,7 +129,7 @@ void array_sub(const float* a, const float* b, float* sub, size_t length)
         return;
     }
 
-    size_t  i;
+    int  i;
     for (i = 0; i < length; i++)
     {
         sub[i] = a[i] - b[i];
@@ -152,7 +152,7 @@ Matrix* addMatrix(const Matrix* A, const Matrix* B)
         return NULL;
     }
 
-    size_t elenum = A->row * A->column;
+    int elenum = A->row * A->column;
 
     float sum[elenum];
     array_sum(A->data, B->data, sum, elenum);
@@ -176,7 +176,7 @@ Matrix* subtractMatrix(const Matrix* A, const Matrix* B)
         return NULL;
     }
 
-    size_t elenum = A->row * A->column;
+    int elenum = A->row * A->column;
 
     float sub[elenum];
     array_sub(A->data, B->data, sub, elenum);
@@ -196,7 +196,7 @@ Matrix* addScalar(const Matrix* A, const float b)
 
     Matrix* C = copyMatrix(A);
     
-    size_t  i;
+    int  i;
     for (i = 0; i < (A->column * A->row); i++)
     {
         C->data[i] = C->data[i] + b;
@@ -230,7 +230,7 @@ Matrix* multiplyScalar(const Matrix* A, const float b)
 
     Matrix* C = copyMatrix(A);
     
-    size_t  i;
+    int  i;
     for (i = 0; i < (A->column * A->row); i++)
     {
         C->data[i] = C->data[i] * b;
@@ -248,7 +248,7 @@ float maxelem(const Matrix* A)
     }
 
     float max = A->data[0];
-    size_t i;
+    int i;
     for ( i = 0; i < (A->column * A->row); i++)
 	{
 		if (max < A->data[i])
@@ -269,7 +269,7 @@ float minelem(const Matrix* A)
     }
 
     float min = A->data[0];
-    size_t i;
+    int i;
     for ( i = 0; i < (A->column * A->row); i++)
 	{
 		if (min > A->data[i])
@@ -295,10 +295,10 @@ Matrix* mulMatrix(const Matrix* A, const Matrix* B)
         return NULL;
     }
 
-    size_t i, j, k, size;
+    int i, j, k, size;
     size = A->row * B->column;
     float c_data[size];
-    size_t C_index = 0;
+    int C_index = 0;
     float C_element = 0;
 
     for(i=0; i < A->row; i++)
