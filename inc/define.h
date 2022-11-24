@@ -1,9 +1,9 @@
 #ifndef  __DEFINE_H__
 #define  __DEFINE_H__
 
-typedef float DATA_TYPE;
-typedef int INT;
-typedef void VOID;
+// typedef float DATA_TYPE;
+// typedef int INT;
+// typedef void VOID;
 
 #define PRECISION "%.5lf\t"
 

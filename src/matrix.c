@@ -1,7 +1,7 @@
 #include "matrix.h"
 #include "define.h"
 
-Matrix* createMatrix(INT row, INT column, INT elenum, DATA_TYPE* data) 
+Matrix* createMatrix(size_t row, size_t column, size_t elenum, float* data) 
 {
     //Generate Matrix Struct 
     //Please remember to free the memory due to dynamic allocate
@@ -17,13 +17,13 @@ Matrix* createMatrix(INT row, INT column, INT elenum, DATA_TYPE* data)
         ERROR_INPUT_POINTER;
         return NULL;
     }
-    INT mat_size = row * column;
+    size_t mat_size = row * column;
     if (mat_size == elenum)
     {
         Matrix* mat = MALLOC(1, Matrix);
         mat->row = row;
         mat->column = column;
-        mat->data = MALLOC(mat_size, DATA_TYPE);
+        mat->data = MALLOC(mat_size, float);
         if (mat == NULL || mat->data == NULL)
         {
             free(mat);
@@ -37,7 +37,7 @@ Matrix* createMatrix(INT row, INT column, INT elenum, DATA_TYPE* data)
             return NULL;
         }
 
-        INT i;
+        size_t i;
         for (i = 0; i < mat_size; i++) 
         {
             mat->data[i] = data[i];
@@ -55,7 +55,7 @@ Matrix* createMatrix(INT row, INT column, INT elenum, DATA_TYPE* data)
     
 }
 
-VOID deleteMatrix(Matrix* mat)
+void deleteMatrix(Matrix* mat)
 {
     if (mat == NULL)
     {
@@ -66,7 +66,7 @@ VOID deleteMatrix(Matrix* mat)
     FREE(mat);
 }
 
-VOID printMatrix(const Matrix* mat) 
+void printMatrix(const Matrix* mat) 
 {
     //Print Matrix
 
@@ -76,7 +76,7 @@ VOID printMatrix(const Matrix* mat)
         return;
     }
 
-    INT i, j;
+    size_t i, j;
     for (i = 0; i < mat->row; i++) 
     {
         for (j = 0; j < mat->column; j++)
@@ -98,13 +98,13 @@ Matrix* copyMatrix(const Matrix* mat_src)
        return NULL;
     }
 
-    INT elenum = mat_src->row * mat_src->column;
+    size_t elenum = mat_src->row * mat_src->column;
     Matrix* mat_copy = createMatrix(mat_src->row, mat_src->column, elenum, mat_src->data);
     
     return mat_copy;
 }
 
-VOID array_sum(const DATA_TYPE* a, const DATA_TYPE* b, DATA_TYPE* sum, INT length)
+void array_sum(const float* a, const float* b, float* sum, size_t length)
 {
     if (a == NULL || b == NULL || sum == NULL)
     {
@@ -112,7 +112,7 @@ VOID array_sum(const DATA_TYPE* a, const DATA_TYPE* b, DATA_TYPE* sum, INT lengt
         return;
     }
 
-    INT  i;
+    size_t  i;
     for (i = 0; i < length; i++)
     {
         sum[i] = a[i] + b[i];
@@ -121,7 +121,7 @@ VOID array_sum(const DATA_TYPE* a, const DATA_TYPE* b, DATA_TYPE* sum, INT lengt
     return;
 }
 
-VOID array_sub(const DATA_TYPE* a, const DATA_TYPE* b, DATA_TYPE* sub, INT length)
+void array_sub(const float* a, const float* b, float* sub, size_t length)
 {
     if (a == NULL || b == NULL || sub == NULL)
     {
@@ -129,7 +129,7 @@ VOID array_sub(const DATA_TYPE* a, const DATA_TYPE* b, DATA_TYPE* sub, INT lengt
         return;
     }
 
-    INT  i;
+    size_t  i;
     for (i = 0; i < length; i++)
     {
         sub[i] = a[i] - b[i];
@@ -152,9 +152,9 @@ Matrix* addMatrix(const Matrix* A, const Matrix* B)
         return NULL;
     }
 
-    INT elenum = A->row * A->column;
+    size_t elenum = A->row * A->column;
 
-    DATA_TYPE sum[elenum];
+    float sum[elenum];
     array_sum(A->data, B->data, sum, elenum);
 
     Matrix* mat_sum =  createMatrix(A->row, A->column, elenum, sum);
@@ -176,9 +176,9 @@ Matrix* subtractMatrix(const Matrix* A, const Matrix* B)
         return NULL;
     }
 
-    INT elenum = A->row * A->column;
+    size_t elenum = A->row * A->column;
 
-    DATA_TYPE sub[elenum];
+    float sub[elenum];
     array_sub(A->data, B->data, sub, elenum);
 
     Matrix* mat_sub = createMatrix(A->row, A->column, elenum, sub);
@@ -186,7 +186,7 @@ Matrix* subtractMatrix(const Matrix* A, const Matrix* B)
     return mat_sub;
 }
 
-Matrix* addScalar(const Matrix* A, const DATA_TYPE b)
+Matrix* addScalar(const Matrix* A, const float b)
 {
     if (A == NULL)
     {
@@ -196,7 +196,7 @@ Matrix* addScalar(const Matrix* A, const DATA_TYPE b)
 
     Matrix* C = copyMatrix(A);
     
-    INT  i;
+    size_t  i;
     for (i = 0; i < (A->column * A->row); i++)
     {
         C->data[i] = C->data[i] + b;
@@ -206,7 +206,7 @@ Matrix* addScalar(const Matrix* A, const DATA_TYPE b)
 
 }
 
-Matrix* subScalar(const Matrix* A, const DATA_TYPE b)
+Matrix* subScalar(const Matrix* A, const float b)
 {
     if (A == NULL)
     {
@@ -220,7 +220,7 @@ Matrix* subScalar(const Matrix* A, const DATA_TYPE b)
 
 }
 
-Matrix* multiplyScalar(const Matrix* A, const DATA_TYPE b)
+Matrix* multiplyScalar(const Matrix* A, const float b)
 {
     if (A == NULL)
     {
@@ -230,7 +230,7 @@ Matrix* multiplyScalar(const Matrix* A, const DATA_TYPE b)
 
     Matrix* C = copyMatrix(A);
     
-    INT  i;
+    size_t  i;
     for (i = 0; i < (A->column * A->row); i++)
     {
         C->data[i] = C->data[i] * b;
@@ -239,16 +239,16 @@ Matrix* multiplyScalar(const Matrix* A, const DATA_TYPE b)
 }
 
 
-DATA_TYPE maxelem(const Matrix* A)
+float maxelem(const Matrix* A)
 {
     if (A == NULL)
     {
         ERROR_INPUT_POINTER;
-        return NULL;
+        return 1;
     }
 
-    DATA_TYPE max = A->data[0];
-    INT i;
+    float max = A->data[0];
+    size_t i;
     for ( i = 0; i < (A->column * A->row); i++)
 	{
 		if (max < A->data[i])
@@ -260,16 +260,16 @@ DATA_TYPE maxelem(const Matrix* A)
     return max;
 }
 
-DATA_TYPE minelem(const Matrix* A)
+float minelem(const Matrix* A)
 {
     if (A == NULL)
     {
         ERROR_INPUT_POINTER;
-        return NULL;
+        return 1;
     }
 
-    DATA_TYPE min = A->data[0];
-    INT i;
+    float min = A->data[0];
+    size_t i;
     for ( i = 0; i < (A->column * A->row); i++)
 	{
 		if (min > A->data[i])
@@ -295,11 +295,11 @@ Matrix* mulMatrix(const Matrix* A, const Matrix* B)
         return NULL;
     }
 
-    INT i, j, k, size;
+    size_t i, j, k, size;
     size = A->row * B->column;
-    DATA_TYPE c_data[size];
-    INT C_index = 0;
-    DATA_TYPE C_element = 0;
+    float c_data[size];
+    size_t C_index = 0;
+    float C_element = 0;
 
     for(i=0; i < A->row; i++)
     {
@@ -331,10 +331,10 @@ Matrix* transpMatrix(const Matrix* A)
         return NULL;
     }
 
-    INT i, j, size;
+    size_t i, j, size;
     size = A->row * A->column;
-    DATA_TYPE B_data[size];
-    INT B_index = 0;
+    float B_data[size];
+    size_t B_index = 0;
     for(i=0; i<A->column; i++){
         for(j=0; j<A->row; j++){
             B_data[B_index] = A->data[j*A->column + i];
@@ -349,12 +349,12 @@ Matrix* transpMatrix(const Matrix* A)
 }
 
 // identity matrix
-Matrix* identityMatrix(const INT side)
+Matrix* identityMatrix(const size_t side)
 {
-    INT i, j;
-    INT size = side * side;
-    DATA_TYPE one = 1.0, zero=0.0;
-    DATA_TYPE data[size];
+    size_t i, j;
+    size_t size = side * side;
+    float one = 1.0, zero=0.0;
+    float data[size];
 
     for (j = 0; j < size; j++)//c or cpp language
 	{

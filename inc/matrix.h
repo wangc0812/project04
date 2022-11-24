@@ -6,41 +6,41 @@
 #include <stdlib.h>
 
 typedef struct Matrix {
-    INT row;
-    INT column;
-    DATA_TYPE *data;
+    size_t row;
+    size_t column;
+    float *data;
 } Matrix;
 
-Matrix* createMatrix(INT row, INT column, INT elenum, DATA_TYPE* data);
+Matrix* createMatrix(size_t row, size_t column, size_t elenum, float* data);
 
-VOID deleteMatrix(Matrix* mat);
+void deleteMatrix(Matrix* mat);
 
-VOID printMatrix(const Matrix* mat);
+void printMatrix(const Matrix* mat);
 
 Matrix* copyMatrix(const Matrix* mat_src);
 
-VOID array_sum(const DATA_TYPE* a, const DATA_TYPE* b, DATA_TYPE* sum, INT length);
+void array_sum(const float* a, const float* b, float* sum, size_t length);
 
-VOID array_sub(const DATA_TYPE* a, const DATA_TYPE* b, DATA_TYPE* sub, INT length);
+void array_sub(const float* a, const float* b, float* sub, size_t length);
 
 Matrix* addMatrix(const Matrix* A, const Matrix* B);
 
 Matrix* subtractMatrix(const Matrix* A, const Matrix* B);
 
-Matrix* addScalar(const Matrix* A, const DATA_TYPE b);
+Matrix* addScalar(const Matrix* A, const float b);
 
-Matrix* subScalar(const Matrix* A, const DATA_TYPE b);
+Matrix* subScalar(const Matrix* A, const float b);
 
-Matrix* multiplyScalar(const Matrix* A, const DATA_TYPE b);
+Matrix* multiplyScalar(const Matrix* A, const float b);
 
-DATA_TYPE maxelem(const Matrix* A);
+float maxelem(const Matrix* A);
 
-DATA_TYPE minelem(const Matrix* A);
+float minelem(const Matrix* A);
 
 Matrix* mulMatrix(const Matrix* A, const Matrix* B);
 
 Matrix* transpMatrix(const Matrix* A);
 
-Matrix* identityMatrix(const INT side);
+Matrix* identityMatrix(const size_t side);
 
 #endif

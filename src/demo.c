@@ -7,9 +7,9 @@ int main()
 {
     printf("test \n");
     const int elenum = 6;
-    DATA_TYPE data[6] = {5,2,8,4,2,5};
-    const INT row = 2;
-    const INT col = 3;
+    float data[6] = {5,2,8,4,2,5};
+    const int row = 2;
+    const int col = 3;
 
     // generate matrix
     printf("**************************** \n");
@@ -37,7 +37,7 @@ int main()
     // matrix add scalar
     printf("**************************** \n");
     printf("matrix add scalar(6.6) \n");
-    DATA_TYPE b = 6.6;
+    float b = 6.6;
     Matrix* mat5 = addScalar(mat1, b);
     printMatrix(mat5);  // to confirm the add scalar function
 
@@ -48,14 +48,14 @@ int main()
 
     printf("**************************** \n");
     printf("matrix mutiple scalar(2.0) \n");
-    DATA_TYPE c = 2.0;
+    float c = 2.0;
     Matrix* mat7 = multiplyScalar(mat1, c);
     printMatrix(mat7);  // to confirm the add scalar function
 
     printf("**************************** \n");
     printf("find the minimal and maximal values of a matrix \n");
-    DATA_TYPE  max = maxelem(mat1);
-    DATA_TYPE  min = minelem(mat1);
+    float  max = maxelem(mat1);
+    float  min = minelem(mat1);
     printf("max value = %f, min value = %f\n", max , min );
 
     printf("**************************** \n");
@@ -75,7 +75,7 @@ int main()
 
     printf("**************************** \n");
     printf("create an identity Matrix. \n");
-    INT side = 8;
+    int side = 8;
     Matrix* mat11 = identityMatrix(side);
     printMatrix(mat11);
 
