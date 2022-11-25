@@ -433,3 +433,44 @@ Matrix* matmul_plain(const Matrix* A, const Matrix* B)
     return C;
 
 }
+
+Matrix* matmul_SIMD(const Matrix* A, const Matrix* B)
+{
+    if (A == NULL || B == NULL)
+    {
+        ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'matmul_SIMD()' \n");
+        return NULL;
+    }
+
+    if (A->column != B->row)
+    {
+        ERROR_SIZE_MATCH;
+        printf("ERROR: This error happened in 'matmul_SIMD()' \n");
+        return NULL;
+    }
+
+    int i, j, k, size;
+    size = A->row * B->column;
+    float c_data[size];
+    int C_index = 0;
+    float C_element = 0;
+
+    for(i=0; i < A->row; i++)
+    {
+        for(j=0; j < B->column; j++)
+        {
+            for(k=0; k <A->column; k++)
+            {
+                C_element += A->data[(i * A->column) + k] * B->data[(k * B->column) + j];
+            }
+            c_data[C_index] = C_element;
+            C_index += 1;
+            C_element = 0;
+        }
+    }
+    
+    Matrix* C = createMatrix( A->row, B->column, size, c_data);
+
+    return C;
+}

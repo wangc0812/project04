@@ -45,4 +45,6 @@ Matrix* identityMatrix(const size_t side);
 
 Matrix* matmul_plain(const Matrix* A, const Matrix* B);
 
+Matrix* matmul_SIMD(const Matrix* A, const Matrix* B);
+
 #endif
