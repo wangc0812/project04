@@ -2,7 +2,7 @@
 #include "define.h"
 
 
-Matrix* createMatrix(size_t row, size_t column, int elenum, float* data) 
+Matrix* createMatrix(size_t row, size_t column, int elenum, float* data)
 {
     //Generate Matrix Struct 
     //Please remember to free the memory due to dynamic allocate
@@ -377,7 +377,7 @@ Matrix* transpMatrix(const Matrix* A)
 // identity matrix
 Matrix* identityMatrix(const size_t side)
 {
-    size_t i, j;
+    size_t i;
     size_t size = side * side;
     // float one = 1.0, zero=0.0;
     float *data = MALLOC(size, float);
