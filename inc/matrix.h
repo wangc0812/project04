@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include "define.h"
 #include <stdlib.h>
+#include <xmmintrin.h>
+#include <string.h>
 
 typedef struct Matrix {
     size_t row;
@@ -43,7 +45,9 @@ Matrix* transpMatrix(const Matrix* A);
 
 Matrix* identityMatrix(const size_t side);
 
-Matrix* matmul_plain(const Matrix* A, const Matrix* B);
+Matrix* matmul_plain_row(const Matrix* A, const Matrix* B);
+
+Matrix* matmul_plain_col(const Matrix* A, const Matrix* B);
 
 Matrix* matmul_SIMD(const Matrix* A, const Matrix* B);
 
