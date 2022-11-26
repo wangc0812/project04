@@ -68,7 +68,8 @@ void deleteMatrix(Matrix* mat)
         printf("ERROR: This error happened in 'deleteMatrix()' \n");
         return;
     }
-    
+
+    FREE(mat -> data); 
     FREE(mat);
 }
 
