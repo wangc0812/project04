@@ -29,8 +29,6 @@ int main()
 
     Matrix* mat4 = matmul_plain_col(mat1, mat2);
     printMatrix(mat4);
-
-
     
     // free memory
     deleteMatrix(mat1);
