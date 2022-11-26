@@ -37,7 +37,6 @@ int main()
     deleteMatrix(mat4);
 
     // test simd
-
     // float a[4] = { 1,2,3,4 };
     // float b[4] = { 5,6,7,8 };
     // float res[4];
