@@ -10,9 +10,9 @@ int main()
 {
     
     printf("test \n");
-    const int elenum = 100;
-    const int row = 10;
-    const int col = 10;
+    const int elenum = 1000000;
+    const int row = 1000;
+    const int col = 1000;
     int i;
 
     float* data = MALLOC(elenum, float);
@@ -30,14 +30,15 @@ int main()
     Matrix* mat1 = createMatrix(row, col, elenum, data);
 
     // print matrix
-    printMatrix(mat1);
+    // printMatrix(mat1);
 
     Matrix* mat2 = transpMatrix(mat1); 
-    printMatrix(mat2);  // to confirm the add function
+    // printMatrix(mat2);  // to confirm the add function
+    int looptime = 1;
 
     Matrix* mat3;
     time_t t1 = time(NULL); //开始计时；
-    for(i = 0; i < 1; i++)
+    for(i = 0; i < looptime; i++)
     {
         mat3 = matmul_plain_row(mat1, mat2);
     }
@@ -46,11 +47,11 @@ int main()
     printf("time rowmulm:");
     printf(PRECISION, time1);
     printf("\n");
-    printMatrix(mat3);
+    // printMatrix(mat3);
 
     Matrix*  mat4;
     t1 = time(NULL); //开始计时；
-    for(i = 0; i < 1; i++)
+    for(i = 0; i < looptime; i++)
     {
         mat4= matmul_plain_col(mat1, mat2);
     } 
@@ -59,11 +60,11 @@ int main()
     printf("time colmulm:");
     printf(PRECISION, time1);
     printf("\n");    
-    printMatrix(mat4);
+    // printMatrix(mat4);
 
     Matrix*  mat5;
     t1 = time(NULL); //开始计时；
-    for(i = 0; i < 1; i++)
+    for(i = 0; i < looptime; i++)
     {
         mat5= matmul_openmp(mat1, mat2);
     } 
@@ -72,7 +73,7 @@ int main()
     printf("time openmpmulm:");
     printf(PRECISION, time1);
     printf("\n");    
-    printMatrix(mat5);
+    // printMatrix(mat5);
 
 
     

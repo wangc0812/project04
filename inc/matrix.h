@@ -50,6 +50,8 @@ Matrix* matmul_plain_row(const Matrix* A, const Matrix* B);
 
 Matrix* matmul_plain_col(const Matrix* A, const Matrix* B);
 
+Matrix* matmul_openmp(const Matrix* A, const Matrix* B);
+
 Matrix* matmul_SIMD(const Matrix* A, const Matrix* B);
 
 #endif

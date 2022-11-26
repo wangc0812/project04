@@ -497,28 +497,22 @@ Matrix* matmul_openmp(const Matrix* A, const Matrix* B)
     memset(C_data, 0.0, size * sizeof(float));
     float temp = 0.0;
 
-
-    #pragma omp parallel shared((A->data),(B->data),C_data) private(i,j,k)
+    omp_set_num_threads(4);
+    #pragma omp for
+    for(i=0; i < A->row; i++)
     {
-        #pragma omp for schedule(dynamic)
-
-        for(i=0; i < A->row; i++)
+        for(j=0; j < B->column; j++)
         {
-            for(j=0; j < B->column; j++)
+            for(k=0; k <A->column; k++)
             {
-                
-                
-                for(k=0; k <A->column; k++)
-                {
-                    temp += A->data[(i * A->column) + k] * B->data[(k * B->column) + j];
-                }
-                C_data[j + i * B->column] = temp;
-                temp = 0.0;
-    
+                temp += A->data[(i * A->column) + k] * B->data[(k * B->column) + j];
             }
-        }
+            C_data[j + i * B->column] = temp;
+             temp = 0.0;
     
+        }
     }
+    
     Matrix* C = createMatrix( A->row, B->column, size, C_data);
 
     return C;
