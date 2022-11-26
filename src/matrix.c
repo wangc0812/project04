@@ -475,7 +475,7 @@ Matrix* matmul_plain_col(const Matrix* A, const Matrix* B)
 
 }
 
-Matrix* matmul_SIMD(const Matrix* A, const Matrix* B)
+Matrix* matmul_openmp(const Matrix* A, const Matrix* B)
 {
     if (A == NULL || B == NULL)
     {
@@ -491,9 +491,23 @@ Matrix* matmul_SIMD(const Matrix* A, const Matrix* B)
         return NULL;
     }
 
-    
-    
-    // Matrix* C = createMatrix( A->row, B->column, size, C_data);
+    int i, j, k, size;
+    size = A->row * B->column;
+    float *C_data = MALLOC(size, float);
+    memset(C_data, 0.0, size * sizeof(float));
 
-    return NULL;
+    for(i=0; i < A->row; i++)
+    {
+        for(j=0; j < B->column; j++)
+        {
+            for(k=0; k <A->column; k++)
+            {
+               C_data[j + i * B->column] += A->data[(i * A->column) + k] * B->data[(k * B->column) + j];
+            }
+        }
+    }
+    
+    Matrix* C = createMatrix( A->row, B->column, size, C_data);
+
+    return C;
 }

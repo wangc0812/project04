@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <xmmintrin.h>
 #include <string.h>
+#include <omp.h>
 
 typedef struct Matrix {
     size_t row;
