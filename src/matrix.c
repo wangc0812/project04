@@ -496,19 +496,30 @@ Matrix* matmul_openmp(const Matrix* A, const Matrix* B)
     float *C_data = MALLOC(size, float);
     memset(C_data, 0.0, size * sizeof(float));
 
-    #pragma omp parallel for num_threads(64)
-
-    for(i=0; i < A->row; i++)
+    omp_set_dynamic(0); // 使用omp_set_dynamic关闭OpenMP动态调整线程数
+    #pragma omp parallel default(shared) num_threads(1) //启动4线程
     {
-        for(j=0; j < B->column; j++)
+        int iam = omp_get_thread_num(); // 通过omp_get_thread_num()当前线程在OpenMP中的ID。该ID从0开始递增
+        int nt = omp_get_num_threads(); // 通过omp_get_num_threads()获取并行执行的线程数。
+
+        for(i=0; i < A->row; i++)
         {
-            for(k=0; k <A->column; k++)
+
+            if (i % nt != iam)
             {
-               C_data[j + i * B->column] += A->data[(i * A->column) + k] * B->data[(k * B->column) + j];
+                continue;
+            }
+
+            for(j=0; j < B->column; j++)
+            {
+                for(k=0; k <A->column; k++)
+                {
+                    C_data[j + i * B->column] += A->data[(i * A->column) + k] * B->data[(k * B->column) + j];
+                }
             }
         }
     }
-    
+
     Matrix* C = createMatrix( A->row, B->column, size, C_data);
 
     return C;

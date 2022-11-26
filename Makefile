@@ -8,8 +8,8 @@ INCLUDE = -I./inc # -I means search files in the specificed folder
 # all .cpp files are in src
 
 CC = gcc
-CFLAGES = -g -c -Wall  
-CFLAG = -g  # gdb debuger
+CFLAGES = -o3 -c -Wall  
+CFLAG = -o3  # gdb debuger
 OMPFLAGS = -fopenmp
 
 # options pass to the compiler
