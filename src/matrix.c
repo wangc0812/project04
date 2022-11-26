@@ -498,7 +498,10 @@ Matrix* matmul_openmp(const Matrix* A, const Matrix* B)
     float temp = 0.0;
 
 
-    #pragma omp parallel for schedule(dynamic)
+    #pragma omp parallel shared((A->data),(B->data),C_data) private(i,j,k)
+    {
+        #pragma omp for schedule(dynamic)
+
         for(i=0; i < A->row; i++)
         {
             for(j=0; j < B->column; j++)
@@ -515,7 +518,7 @@ Matrix* matmul_openmp(const Matrix* A, const Matrix* B)
             }
         }
     
-
+    }
     Matrix* C = createMatrix( A->row, B->column, size, C_data);
 
     return C;
