@@ -496,6 +496,8 @@ Matrix* matmul_openmp(const Matrix* A, const Matrix* B)
     float *C_data = MALLOC(size, float);
     memset(C_data, 0.0, size * sizeof(float));
 
+    #pragma omp parallel for num_threads(64)
+
     for(i=0; i < A->row; i++)
     {
         for(j=0; j < B->column; j++)
