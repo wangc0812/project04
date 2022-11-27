@@ -508,7 +508,7 @@ Matrix* matmul_openmp(const Matrix* A, const Matrix* B)
                 temp += A->data[(i * A->column) + k] * B->data[(k * B->column) + j];
             }
             C_data[j + i * B->column] = temp;
-             temp = 0.0;
+            temp = 0.0;
     
         }
     }
@@ -611,7 +611,6 @@ Matrix* matmul_SIMD(const Matrix* A, const Matrix* B)
     }
     
     Matrix* C = createMatrix( A->row, B->column, size, C_data);
-
     FREE(a_row);
     FREE(b_col);
 

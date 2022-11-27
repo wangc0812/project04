@@ -9,9 +9,9 @@ int main()
 {
     
     printf("test \n");
-    const int elenum = 100;
-    const int row = 10;
-    const int col = 10;
+    const int elenum = 1000000;
+    const int row = 1000;
+    const int col = 1000;
     int i;
 
     float* data = MALLOC(elenum, float);
@@ -47,7 +47,8 @@ int main()
     printf("time rowmulm:");
     printf(PRECISION, time1);
     printf("\n");
-    printMatrix(mat3);
+    // printMatrix(mat3);
+    deleteMatrix(mat3);
 
     Matrix*  mat4;
     t1 = time(NULL); //开始计时；
@@ -61,6 +62,7 @@ int main()
     printf(PRECISION, time1);
     printf("\n");    
     // printMatrix(mat4);
+    deleteMatrix(mat4);
 
     Matrix*  mat5;
     t1 = time(NULL); //开始计时；
@@ -74,7 +76,6 @@ int main()
     printf(PRECISION, time1);
     printf("\n");    
     // printMatrix(mat5);
-
     deleteMatrix(mat5);
 
     Matrix*  mat6;
@@ -88,18 +89,19 @@ int main()
     printf("time SIMDmulm:");
     printf(PRECISION, time1);
     printf("\n");    
-    printMatrix(mat6);
-    
-
-
-    
+    // printMatrix(mat6);
     // free memory
     deleteMatrix(mat1);
     deleteMatrix(mat2);
-    deleteMatrix(mat3);
-    deleteMatrix(mat4);
-    // deleteMatrix(mat5);
     deleteMatrix(mat6);
+
+
+    
+
+    
+    
+    
+    
 
     // test simd
     // float a[4] = { 1,2,3,4 };
