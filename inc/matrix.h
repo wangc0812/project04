@@ -52,6 +52,8 @@ Matrix* matmul_plain_col(const Matrix* A, const Matrix* B);
 
 Matrix* matmul_openmp(const Matrix* A, const Matrix* B);
 
+float vector_dot_SIMD(const float* x, const float* y, const size_t len);
+
 Matrix* matmul_SIMD(const Matrix* A, const Matrix* B);
 
 #endif

@@ -3,16 +3,15 @@
 #include "matrix.h"
 #include "define.h"
 #include <time.h>
-#include <xmmintrin.h>
 
 
 int main()
 {
     
     printf("test \n");
-    const int elenum = 1000000;
-    const int row = 1000;
-    const int col = 1000;
+    const int elenum = 100;
+    const int row = 10;
+    const int col = 10;
     int i;
 
     float* data = MALLOC(elenum, float);
@@ -34,7 +33,8 @@ int main()
 
     Matrix* mat2 = transpMatrix(mat1); 
     // printMatrix(mat2);  // to confirm the add function
-    int looptime = 1;
+    
+    int looptime = 1; // TODO
 
     Matrix* mat3;
     time_t t1 = time(NULL); //开始计时；
@@ -47,7 +47,7 @@ int main()
     printf("time rowmulm:");
     printf(PRECISION, time1);
     printf("\n");
-    // printMatrix(mat3);
+    printMatrix(mat3);
 
     Matrix*  mat4;
     t1 = time(NULL); //开始计时；
@@ -73,10 +73,20 @@ int main()
     printf("time openmpmulm:");
     printf(PRECISION, time1);
     printf("\n");    
-    // printMatrix(mat5);
+    printMatrix(mat5);
 
-
-    
+    Matrix*  mat6;
+    t1 = time(NULL); //开始计时；
+    for(i = 0; i < looptime; i++)
+    {
+        mat6= matmul_SIMD(mat1, mat2);
+    } 
+    t2 = time(NULL); //结束计时
+    time1 = t2 - t1;
+    printf("time SIMDmulm:");
+    printf(PRECISION, time1);
+    printf("\n");    
+    printMatrix(mat6);
     
 
 
@@ -87,6 +97,7 @@ int main()
     deleteMatrix(mat3);
     deleteMatrix(mat4);
     deleteMatrix(mat5);
+    deleteMatrix(mat6);
 
     // test simd
     // float a[4] = { 1,2,3,4 };

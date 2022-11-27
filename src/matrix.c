@@ -404,14 +404,14 @@ Matrix* matmul_plain_row(const Matrix* A, const Matrix* B)
     if (A == NULL || B == NULL)
     {
         ERROR_INPUT_POINTER;
-        printf("ERROR: This error happened in 'matmul_SIMD()' \n");
+        printf("ERROR: This error happened in 'matmul_plain_row' \n");
         return NULL;
     }
 
     if (A->column != B->row)
     {
         ERROR_SIZE_MATCH;
-        printf("ERROR: This error happened in 'matmul_SIMD()' \n");
+        printf("ERROR: This error happened in 'matmul_plain_row' \n");
         return NULL;
     }
 
@@ -442,14 +442,14 @@ Matrix* matmul_plain_col(const Matrix* A, const Matrix* B)
     if (A == NULL || B == NULL)
     {
         ERROR_INPUT_POINTER;
-        printf("ERROR: This error happened in 'matmul_SIMD()' \n");
+        printf("ERROR: This error happened in 'matmul_plain_col' \n");
         return NULL;
     }
 
     if (A->column != B->row)
     {
         ERROR_SIZE_MATCH;
-        printf("ERROR: This error happened in 'matmul_SIMD()' \n");
+        printf("ERROR: This error happened in 'matmul_plain_col' \n");
         return NULL;
     }
 
@@ -516,4 +516,100 @@ Matrix* matmul_openmp(const Matrix* A, const Matrix* B)
     Matrix* C = createMatrix( A->row, B->column, size, C_data);
 
     return C;
+}
+
+float vector_dot_SIMD(const float* x, const float* y, const size_t len)
+{
+    
+    if (x == NULL || y == NULL)
+    {
+        ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'vector_dot_SIMD()' \n");
+        return -1;
+    }
+
+    float inner_prod = 0.0f;
+	__m128 X, Y; //声明两个存放在SSE的128位专用寄存器的变量
+	__m128 acc = _mm_setzero_ps(); // 声明一个存放在SSE的128位专用寄存器的变量，用来存放X+Y的结果，初始值为0
+	float temp[4];//存放中间变量的参数
+
+	long i;
+	for (i = 0; i + 4 < len; i += 4) 
+    {
+        //128位专用寄存器，一次性可以处理4组32位变量的运算
+		X = _mm_loadu_ps(x + i); // 将x加载到X（由于128位可以存放四个32位数据，所以默认一次加载连续的4个参数）
+		Y = _mm_loadu_ps(y + i);//同上
+		acc = _mm_add_ps(acc, _mm_mul_ps(X, Y));//x*y，每轮的x1*y1求和，x2*y2求和，x3*y3求和，x4*y4求和,最终产生的四个和，放在acc的128位寄存器中。
+	}
+	_mm_storeu_ps(&temp[0], acc); // 将acc中的4个32位的数据加载进内存
+	inner_prod = temp[0] + temp[1] + temp[2] + temp[3];//点乘求和
+
+	// 刚才只是处理了前4的倍数个元素的点乘，如果len不是4的倍数，那么还有个小尾巴要处理一下
+	for (; i < len; ++i) 
+    {
+		inner_prod += x[i] * y[i];//继续累加小尾巴的乘积
+	}
+	return inner_prod;//大功告成
+}
+
+Matrix* matmul_SIMD(const Matrix* A, const Matrix* B)
+{
+
+    if (A == NULL || B == NULL)
+    {
+        ERROR_INPUT_POINTER;
+        printf("ERROR: This error happened in 'matmul_SIMD()' \n");
+        return NULL;
+    }
+
+    if (A->column != B->row)
+    {
+        ERROR_SIZE_MATCH;
+        printf("ERROR: This error happened in 'matmul_SIMD()' \n");
+        return NULL;
+    }
+
+    int i, j, size;
+    size = A->row * B->column;
+    float *C_data = MALLOC(size, float);
+    memset(C_data, 0.0, size * sizeof(float));
+    
+    // we can oprate matrix multiplication using vector-vector dot product
+    // A = | a1 |      B = |b1.T b2.T b3.T|  (*.T refers to vector transpose)
+    //     | a2 |
+    //     | a3 |
+    // a1,a2,a3 size: A->column * 1; b1,b2,b3 size:  B->row * 1
+    // A * B = | a1*b1 a1*b2 a1*b3 |
+    //         | a2*b1 a2*b2 a2*b3 |
+    //         | a3*b1 a3*b2 a3*b3 |
+
+    float* a = MALLOC(A->column, float);   // store the row vector
+    float* b = MALLOC(B->row,float); // store the column vector
+
+    for(i = 0; i < A->row; i++)
+    {
+        for(j = 0; j < A->column; j++)
+        {
+            a[j] = A->data[(i * A->column) + j];
+        }
+
+        for(j = 0; j < B->column; j++)
+        {
+            for(i = 0; i < B->row; i++)
+            {
+                b[i] = B->data[(i * B->column) + j];
+            }
+
+            // C_data[j + i * B->column] += vector_dot_SIMD(a, b, A->column);
+            
+        }
+    }
+    
+    Matrix* C = createMatrix( A->row, B->column, size, C_data);
+
+    FREE(a);
+    FREE(b);
+
+    return C;
+
 }
