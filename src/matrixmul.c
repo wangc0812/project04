@@ -73,7 +73,9 @@ int main()
     printf("time openmpmulm:");
     printf(PRECISION, time1);
     printf("\n");    
-    printMatrix(mat5);
+    // printMatrix(mat5);
+
+    deleteMatrix(mat5);
 
     Matrix*  mat6;
     t1 = time(NULL); //开始计时；
@@ -96,7 +98,7 @@ int main()
     deleteMatrix(mat2);
     deleteMatrix(mat3);
     deleteMatrix(mat4);
-    deleteMatrix(mat5);
+    // deleteMatrix(mat5);
     deleteMatrix(mat6);
 
     // test simd

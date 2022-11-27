@@ -569,7 +569,8 @@ Matrix* matmul_SIMD(const Matrix* A, const Matrix* B)
         return NULL;
     }
 
-    int i, j, size;
+    int i, j, k, m, size, C_index;
+    float C_element = 0.0;
     size = A->row * B->column;
     float *C_data = MALLOC(size, float);
     memset(C_data, 0.0, size * sizeof(float));
@@ -583,32 +584,36 @@ Matrix* matmul_SIMD(const Matrix* A, const Matrix* B)
     //         | a2*b1 a2*b2 a2*b3 |
     //         | a3*b1 a3*b2 a3*b3 |
 
-    float* a = MALLOC(A->column, float);   // store the row vector
-    float* b = MALLOC(B->row,float); // store the column vector
+    float* a_row = MALLOC(A->column, float); // store the row vector
+    memset(a_row, 0.0, A->column * sizeof(float));
+    float* b_col = MALLOC(B->row,float); // store the column vector
+    memset(b_col, 0.0, B->row * sizeof(float));
 
     for(i = 0; i < A->row; i++)
     {
-        for(j = 0; j < A->column; j++)
+        for(k = 0; k < A->column; k++)
         {
-            a[j] = A->data[(i * A->column) + j];
+            a_row[k] = A->data[(i * A->column) + k];
         }
 
         for(j = 0; j < B->column; j++)
         {
-            for(i = 0; i < B->row; i++)
+            for(m = 0; m < B->row; m++)
             {
-                b[i] = B->data[(i * B->column) + j];
+                b_col[m] = B->data[(m * B->column) + j];
             }
-
-            // C_data[j + i * B->column] += vector_dot_SIMD(a, b, A->column);
-            
+            C_element += vector_dot_SIMD(a_row, b_col, A->column);
+            C_data[C_index] = C_element;
+            C_index += 1;
+            C_element = 0;
         }
+            
     }
     
     Matrix* C = createMatrix( A->row, B->column, size, C_data);
 
-    FREE(a);
-    FREE(b);
+    FREE(a_row);
+    FREE(b_col);
 
     return C;
 

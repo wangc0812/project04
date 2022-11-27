@@ -8,9 +8,10 @@ INCLUDE = -I./inc # -I means search files in the specificed folder
 # all .cpp files are in src
 
 CC = gcc
-CFLAGES = -o3 -c -Wall  
-CFLAG = -o3  # gdb debuger
+CFLAGES = -o3 -c -Wall 
+CFLAG = -o3  #  -g gdb debuger
 OMPFLAGS = -fopenmp
+SIMD = -mavx2
 
 # options pass to the compiler
 # -c generates the object file
@@ -21,10 +22,10 @@ OMPFLAGS = -fopenmp
 
 
 $(TARGET) : $(OBJS)
-	$(CC) $(OMPFLAGS) $(CFLAG) -o $@ $(OBJS) 
+	$(CC) $(SIMD) $(OMPFLAGS) $(CFLAG) -o $@ $(OBJS) 
 
 %.o : %.c # all the .o objects depend on the .c files
-	$(CC) $(OMPFLAGS) $(CFLAGES) $< -o $@ $(INCLUDE)
+	$(CC) $(SIMD) $(OMPFLAGS) $(CFLAGES) $< -o $@ $(INCLUDE)
 
 
 .PHONY : clean # .PHONY will prevent making from confusing the phony target with a file name
